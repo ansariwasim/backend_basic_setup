@@ -1,0 +1,35 @@
+{
+  "name": "backend_basic_setup",
+  "version": "1.0.0",
+  "description": "Basic setup for backend",
+  "main": "index.js",
+ 
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ansariwasim/backend_basic_setup.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/ansariwasim/backend_basic_setup/issues"
+  },
+  "homepage": "https://github.com/ansariwasim/backend_basic_setup#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^18.0.5",
+    "express.js": "^1.0.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose.js": "^0.0.1-security",
+    "multer": "^2.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.14.10"
+  }
+}
