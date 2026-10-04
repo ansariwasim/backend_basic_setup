@@ -1,7 +1,18 @@
+
+import "dotenv/config";
 import app from "./src/app.js"
-const port = 8080;
+import connectDB from "./src/db/index.db.js";
 
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+
+
+connectDB()
+  .then(() => {
+    app.listen(process.env.PORT || 8000, () => {
+      console.log(`Server is running on port ${process.env.PORT || 8000}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Database connection failed:", error);
+  });
+
