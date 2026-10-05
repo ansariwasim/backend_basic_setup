@@ -19,7 +19,7 @@ app.use(express.json());
 import authRoute from './route/auth.route.js'
 
 // route
-app.use("/api/v1/auth", authRoute)
+app.use("/api/auth", authRoute)
 
 
 export default app;
