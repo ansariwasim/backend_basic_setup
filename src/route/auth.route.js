@@ -16,4 +16,6 @@ route.post("/register",  upload.fields([
     },
   ]), authController.registerUser)
 
+  route.post("/login", authController.loginUser)
+
 export default route;
