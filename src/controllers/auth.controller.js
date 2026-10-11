@@ -72,8 +72,57 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Errow throw while user register")
     }
 
-    res.status(401).json(new ApiResponse(400, createUser, "User register successfully"))
+    res.status(200).json(new ApiResponse(401, createUser, "User register successfully"))
 
 });
 
-export default { registerUser };
+
+// logic controller
+const loginUser = asyncHandler(async(req,res)=>{
+
+    const {userName, email, password} = req.body
+
+    if(!(userName || email)){
+        throw new ApiError(400, "userName or email are required")
+    }
+
+      if (!password) {
+  throw new ApiError(400, "Password is required");
+}
+
+const user = await User.findOne({
+    $or:[
+        {userName}, {email}
+    ]
+})
+
+if(!user){
+    throw new ApiError(400, "user doesnot exist,")
+}
+
+const isPasswordCorrect = await user.isPasswordCorrect(password)
+
+if(!isPasswordCorrect){
+    throw new ApiError(400, "Invalid user credentials password")
+}
+
+const {refreshToken, accessToken} = await generateAccessTokenAndRefreshToken(user._id)
+
+
+const loginUser = await User.findById(user._id).select("-password -accesstoken ")
+
+const options = {
+httpOnly: true,
+secure: true
+}
+
+res
+.status(200)
+.cookie("refreshToken", refreshToken, options)
+.cookie("accessToken", accessToken, options)
+.json(new ApiResponse(200, {user: loginUser, refreshToken, accessToken}, "User logged in successfully"))
+
+
+})
+
+export default { registerUser , loginUser};
