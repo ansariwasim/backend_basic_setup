@@ -4,6 +4,28 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js"
 
+const generateAccessTokenAndRefreshToken = async (userId)=>{
+
+try {
+      const user =  await User.findById(userId)
+      if(!user){
+         throw new ApiError(400, "User not found")
+      }
+    
+      const accessToken = user.generateAccessToken()
+      const refreshToken = user.generateRefreshToken()
+    
+      user.refreshToken = refreshToken;
+      await user.save({validateBeforeSave: false})
+    
+      return {accessToken, refreshToken}
+} catch (error) {
+    throw new ApiError(400, " something went wronge While generating accessToken and refresh Token ")
+}
+}
+
+
+// Register controller
 const registerUser = asyncHandler(async (req, res) => {
 
     const { fullName, userName, email, password } = req.body
