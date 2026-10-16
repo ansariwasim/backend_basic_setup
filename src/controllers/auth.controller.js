@@ -125,4 +125,33 @@ res
 
 })
 
-export default { registerUser , loginUser};
+// logout controller
+const logoutUser = asyncHandler(async(req, res)=> {
+
+    
+    await User.findByIdAndUpdate(req.user._id,
+        {
+          $unset:{
+            refreshToken: 1
+          }
+        },
+        {
+            new: true
+        }
+    )
+
+    const options = {
+        httpOnly: true,
+        secure: true
+
+    }
+
+    return res
+    .status(200)
+    .cookie("accessToken", options)
+    .cookie("refreshToken", options)
+    .json(new ApiResponse(200,{}, "user loggedOut successfully"))
+})
+
+
+export default { registerUser , loginUser, logoutUser};
