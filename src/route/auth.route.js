@@ -27,4 +27,7 @@ route.post("/logout", verifyJwt, authController.logoutUser)
 // Refresh access Token 
 route.post("/refresh-token", authController.refreshAccessToken)
 
+// change password 
+route.post("/change-password", verifyJwt, authController.changePassword)
+
 export default route;
