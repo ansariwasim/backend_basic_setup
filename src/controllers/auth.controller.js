@@ -237,4 +237,32 @@ return res
 
 })
 
+// updateAccoutDetail 
+const updateAccoutDetail = asyncHandler(async(req, res)=> {
+
+    const {fullName, email} = req.body
+
+    if([fullName, email].some((field)=> !field || field.trim() == " ")){
+        throw new ApiError(400, "All fields are required")
+    }
+
+    const user = await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set:{
+                fullName,
+                email
+            }
+        },
+        {new: true}
+    ).select("-password")
+
+    return res
+    .status(200)
+    .json(200, {user}, "Some Account Detail Updated successfully")
+
+})
+
+
+
 export default { registerUser , loginUser, logoutUser, refreshAccessToken, changePassword, getCurrentUser};
