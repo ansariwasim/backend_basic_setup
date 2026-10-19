@@ -3,7 +3,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js"
-import { JsonWebTokenError } from "jsonwebtoken";
+
 
 const generateAccessTokenAndRefreshToken = async (userId)=>{
 
@@ -263,6 +263,38 @@ const updateAccoutDetail = asyncHandler(async(req, res)=> {
 
 })
 
+// update avatar image
+const updateAvatarImage = asyncHandler(async(req,res)=> {
+    const avatarLocalPath = req.file?.path
+
+    if(!avatarLocalPath){
+        throw new ApiError(400, "Avatar image is required")
+    }
+
+    const uploadAvatarImage = await uploadOnCloudinary(avatarLocalPath)
+    if(!uploadAvatarImage.url){
+           throw new ApiError(401, "update url not found")
+    }
+
+    const user = await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set:{
+                avatar: uploadAvatarImage.url
+            }
+        },
+        {new: true}
+    ).select("-password")
+
+    if(!user){
+        throw new ApiError(404, "user  not found")
+    }
+
+    return res
+    .status(200)
+    .json(new ApiResponse (200, {user}, "updated avatar image successfully"))
+})
 
 
-export default { registerUser , loginUser, logoutUser, refreshAccessToken, changePassword, getCurrentUser};
+
+export default { registerUser , loginUser, logoutUser, refreshAccessToken, changePassword, getCurrentUser, updateAccoutDetail, updateAvatarImage};
