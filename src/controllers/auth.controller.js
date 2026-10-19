@@ -295,6 +295,39 @@ const updateAvatarImage = asyncHandler(async(req,res)=> {
     .json(new ApiResponse (200, {user}, "updated avatar image successfully"))
 })
 
+// updata cover image
+const updateCoverImage = asyncHandler(async(req,res)=> {
+
+    const coverImageLocalPath = req.file?.path
+
+    if(!coverImageLocalPath){
+        throw new ApiError(400, "coverImage is required")
+    }
+    
+    const uploadCoverImage = await uploadOnCloudinary(coverImageLocalPath)
+
+    if(!uploadCoverImage.url){
+        throw new ApiError(500, "failed to upload coverImage")
+    }
+
+    const user = await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+          $set:{
+                coverImage: uploadCoverImage.url
+          }  
+        },
+        {new: true}
+    ).select("-password -refreshToken")
+
+    if(!user){
+        throw new ApiError(404, "User not found")
+    }
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200, {user}, "Cover Image updated successfully"))
+})
 
 
-export default { registerUser , loginUser, logoutUser, refreshAccessToken, changePassword, getCurrentUser, updateAccoutDetail, updateAvatarImage};
+export default { registerUser , loginUser, logoutUser, refreshAccessToken, changePassword, getCurrentUser, updateAccoutDetail, updateAvatarImage, updateCoverImage};
