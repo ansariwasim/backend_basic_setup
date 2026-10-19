@@ -228,4 +228,13 @@ return res
 
 })
 
-export default { registerUser , loginUser, logoutUser, refreshAccessToken, changePassword};
+// Get currentUser 
+const getCurrentUser = asyncHandler(async(req, res)=> {
+
+return res
+.status(200)
+.json(new ApiResponse(200, req.user, "Current User fetch successfully"))
+
+})
+
+export default { registerUser , loginUser, logoutUser, refreshAccessToken, changePassword, getCurrentUser};
