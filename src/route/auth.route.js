@@ -37,9 +37,8 @@ route.get("/current-user", verifyJwt, authController.getCurrentUser)
 route.patch("/updateUserDetail", verifyJwt, authController.updateAccoutDetail)
 
 // change avartar image
-route.patch( "/changeAvatarImage",
-    verifyJwt,
-    upload.single("avatar"),
-    authController.updateAvatarImage
-);
+route.patch( "/changeAvatarImage", verifyJwt, upload.single("avatar"), authController.updateAvatarImage);
+
+// change cover image
+route.patch("/changeCoverImage", verifyJwt, upload.single("coverImage"), authController.updateCoverImage)
 export default route;
