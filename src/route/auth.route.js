@@ -28,6 +28,18 @@ route.post("/logout", verifyJwt, authController.logoutUser)
 route.post("/refresh-token", authController.refreshAccessToken)
 
 // change password 
-route.post("/change-password", verifyJwt, authController.changePassword)
+route.patch("/change-password", verifyJwt, authController.changePassword)
 
+// Get current User
+route.get("/current-user", verifyJwt, authController.getCurrentUser)
+
+// change user detail
+route.patch("/updateUserDetail", verifyJwt, authController.updateAccoutDetail)
+
+// change avartar image
+route.patch( "/changeAvatarImage",
+    verifyJwt,
+    upload.single("avatar"),
+    authController.updateAvatarImage
+);
 export default route;
